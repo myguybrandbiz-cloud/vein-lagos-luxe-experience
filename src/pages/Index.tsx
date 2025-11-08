@@ -3,11 +3,69 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
 import { MapPin, Phone, Mail, Instagram, Facebook, Music, Sparkles, Calendar, Users } from "lucide-react";
 import veinLogo from "@/assets/vein-logo.png";
 import heroBg from "@/assets/hero-bg.jpg";
 import vipService from "@/assets/vip-service.jpg";
 import eventBg from "@/assets/event-bg.jpg";
+import { useEffect, useRef } from "react";
+
+const events = [
+  { date: "NOV 15", title: "International DJ Night", performer: "DJ Spinall", time: "10:00 PM" },
+  { date: "NOV 23", title: "Exclusive VIP Gala", performer: "Special Guests", time: "9:00 PM" },
+  { date: "DEC 01", title: "Champagne & Diamonds", performer: "Live Performance", time: "11:00 PM" },
+  { date: "DEC 08", title: "New Year's Countdown", performer: "Celebrity DJ", time: "9:00 PM" },
+  { date: "DEC 15", title: "Elite Members Night", performer: "Surprise Acts", time: "10:30 PM" },
+];
+
+const EventsCarousel = () => {
+  const carouselRef = useRef<any>(null);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (carouselRef.current?.scrollNext) {
+        carouselRef.current.scrollNext();
+      }
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <Carousel
+      ref={carouselRef}
+      opts={{
+        align: "start",
+        loop: true,
+      }}
+      className="w-full"
+    >
+      <CarouselContent className="-ml-4">
+        {events.map((event, index) => (
+          <CarouselItem key={index} className="pl-4 md:basis-1/2 lg:basis-1/3">
+            <Card className="bg-card border-primary/30 hover:border-primary/60 transition-all hover-scale">
+              <CardContent className="p-6">
+                <div className="flex items-start justify-between mb-4">
+                  <div>
+                    <p className="text-sm text-primary font-bold mb-1">{event.date}</p>
+                    <h3 className="text-xl font-bold text-foreground mb-1">{event.title}</h3>
+                    <p className="text-sm text-muted-foreground">{event.performer}</p>
+                  </div>
+                  <Calendar className="w-6 h-6 text-primary" />
+                </div>
+                <p className="text-sm text-accent font-semibold mb-4">{event.time}</p>
+                <Button size="sm" className="bg-gradient-gold text-primary-foreground hover:opacity-90 w-full">
+                  Reserve Spot
+                </Button>
+              </CardContent>
+            </Card>
+          </CarouselItem>
+        ))}
+      </CarouselContent>
+    </Carousel>
+  );
+};
 
 const Index = () => {
   return (
@@ -25,11 +83,6 @@ const Index = () => {
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/20 to-background"></div>
         
         <div className="container mx-auto px-4 z-10 text-center animate-fade-in">
-          <img 
-            src={veinLogo} 
-            alt="Vein Lagos Logo" 
-            className="w-64 md:w-96 mx-auto mb-8 drop-shadow-2xl hover-scale"
-          />
           <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-gold bg-clip-text text-transparent">
             VEIN LAGOS
           </h1>
@@ -52,6 +105,16 @@ const Index = () => {
             <div className="w-1 h-3 bg-primary rounded-full"></div>
           </div>
         </div>
+      </section>
+
+      {/* Events Carousel */}
+      <section className="py-16 bg-background overflow-hidden">
+        <div className="container mx-auto px-4 mb-8">
+          <h2 className="text-3xl md:text-4xl font-bold text-center bg-gradient-gold bg-clip-text text-transparent">
+            Upcoming Events
+          </h2>
+        </div>
+        <EventsCarousel />
       </section>
 
       {/* About Section */}
